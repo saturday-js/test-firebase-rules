@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "nyc ava tests/*.test.js --verbose"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "ava": "^0.24.0",
+    "babel-eslint": "^8.0.3",
     "eslint": "^4.12.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
