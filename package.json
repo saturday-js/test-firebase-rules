@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc ava tests/*.test.js --verbose"
+    "test": "ava tests/*.test.js --verbose"
   },
   "author": "",
   "license": "ISC",
@@ -16,7 +16,6 @@
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
-    "nyc": "^11.3.0",
     "targaryen": "^3.0.5"
   }
 }
