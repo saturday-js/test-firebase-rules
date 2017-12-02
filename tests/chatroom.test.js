@@ -30,12 +30,20 @@ const data = {
       "title": "Saturday JS",
       "lastMessage": "ok",
       "timestamp": 1459361975337
+    },
+    "room2": {
+      "title": "Movie Time",
+      "lastMessage": "nah, it suck",
+      "timestamp": 1459361975337
     }
   },
   "members": {
     "room1": {
       "john": true,
-      "jane": true,
+      "jane": true
+    },
+    "room2": {
+      "joe": true,
       "clark": true
     }
   },
@@ -51,6 +59,18 @@ const data = {
         "message": "ok",
         "timestamp": 1459361975337
       }
+    },
+    "room2": {
+      "m1": {
+        "name": "clark",
+        "message": "Hey dude. How about salad for today?",
+        "timestamp": 1459361875337
+      },
+      "m2": {
+        "name": "joe",
+        "message": "nah, it suck",
+        "timestamp": 1459361975337
+      }
     }
   }
 }
@@ -60,31 +80,41 @@ const jane = {uid: 'jane'}
 const joe = {uid: 'joe'}
 
 test(`Anonymous user shouldn't be able to read/write chats, members and messages`, t => {
-  t.pass(database.read('/chats/room1').allowed, false)
-  t.pass(database.read('/members/room1').allowed, false)
-  t.pass(database.read('/messages/room1').allowed, false)
+  t.is(database.read('/chats/room1').allowed, false)
+  t.is(database.read('/members/room1').allowed, false)
+  t.is(database.read('/messages/room1').allowed, false)
 
-  t.pass(database.write('/chats/room1', {title: 'new title'}).allowed, false)
-  t.pass(database.write('/members/room1', {newmember: true}).allowed, false)
-  t.pass(database.write('/messages/room1/m3',{message: 'noooo'}).allowed, false)
+  t.is(database.write('/chats/room1', {title: 'new title'}).allowed, false)
+  t.is(database.write('/members/room1', {newmember: true}).allowed, false)
+  t.is(database.write('/messages/room1/m3',{message: 'noooo'}).allowed, false)
 })
 
 test(`Joe shouldn't be able to read/write chats, members and messages`, t => {
-  t.pass(database.as(joe).read('/chats/room1').allowed, false)
-  t.pass(database.as(joe).read('/members/room1').allowed, false)
-  t.pass(database.as(joe).read('/messages/room1').allowed, false)
+  t.is(database.as(joe).read('/chats/room1').allowed, false)
+  t.is(database.as(joe).read('/members/room1').allowed, false)
+  t.is(database.as(joe).read('/messages/room1').allowed, false)
 
-  t.pass(database.as(joe).write('/chats/room1', {title: 'new title'}).allowed, false)
-  t.pass(database.as(joe).write('/members/room1', {newmember: true}).allowed, false)
-  t.pass(database.as(joe).write('/messages/room1/m3',{message: 'noooo'}).allowed, false)
+  t.is(database.as(joe).write('/chats/room1', {title: 'new title'}).allowed, false)
+  t.is(database.as(joe).write('/members/room1', {newmember: true}).allowed, false)
+  t.is(database.as(joe).write('/messages/room1/m3',{message: 'noooo'}).allowed, false)
 })
 
 test('Jane should be able to read/write chats, members and messages', t => {
-  t.pass(database.as(jane).read('/chats/room1').allowed, true)
-  t.pass(database.as(jane).read('/members/room1').allowed, true)
-  t.pass(database.as(jane).read('/messages/room1').allowed, true)
+  t.is(database.as(jane).read('/chats/room1').allowed, true)
+  t.is(database.as(jane).read('/members/room1').allowed, true)
+  t.is(database.as(jane).read('/messages/room1').allowed, true)
 
-  t.pass(database.as(jane).write('/chats/room1', {title: 'new title'}).allowed, true)
-  t.pass(database.as(jane).write('/members/room1', {newmember: true}).allowed, true)
-  t.pass(database.as(jane).write('/messages/room1/m3',{message: 'noooo'}).allowed, true)
+  t.is(database.as(jane).write('/chats/room1', {title: 'new title'}).allowed, true)
+  t.is(database.as(jane).write('/members/room1', {newmember: true}).allowed, true)
+  t.is(database.as(jane).write('/messages/room1/m3',{message: 'noooo'}).allowed, true)
+})
+
+test(`Jane shouldn't be able to read/write chats, members and messages in room2`, t => {
+  t.is(database.as(jane).read('/chats/room2').allowed, false)
+  t.is(database.as(jane).read('/members/room2').allowed, false)
+  t.is(database.as(jane).read('/messages/room2').allowed, false)
+
+  t.is(database.as(jane).write('/chats/room2', {title: 'new title'}).allowed, false)
+  t.is(database.as(jane).write('/members/room2', {newmember: true}).allowed, false)
+  t.is(database.as(jane).write('/messages/room2/m3',{message: 'noooo'}).allowed, false)
 })

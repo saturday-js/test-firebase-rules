@@ -19,11 +19,11 @@ const data = {
 const database = targaryen.database(rules, data)
 
 test(`Anonymous user shouldn't be able to read/write `, t => {
-  t.pass(database.read('/message').allowed, false)
-  t.pass(database.write('/message', {1: {text: 'hey' }}).allowed, false)
+  t.is(database.read('/message').allowed, false)
+  t.is(database.write('/message', {1: {text: 'hey' }}).allowed, false)
 })
 
 test('Logged in user should be able to read/write', t => {
-  t.pass(database.as({uid: 'someuid'}).read('/message').allowed, true)
-  t.pass(database.as({uid: 'someuid'}).write('/message', {1: {text: 'hey' }}).allowed, true)
+  t.is(database.as({uid: 'someuid'}).read('/message').allowed, true)
+  t.is(database.as({uid: 'someuid'}).write('/message', {1: {text: 'hey' }}).allowed, true)
 })
