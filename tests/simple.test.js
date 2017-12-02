@@ -3,8 +3,8 @@ const targaryen = require('targaryen')
 
 const rules = {
   rules: {
-    '.read': 'auth != null',
-    '.write': 'auth != null'
+    '.read': 'auth !== null',
+    '.write': 'auth !== null'
   }
 };
 
