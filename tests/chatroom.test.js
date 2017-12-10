@@ -12,7 +12,7 @@ const rules = {
     members: {
       $roomId: {
         '.read': "auth !== null && data.child(auth.uid).exists()",
-        '.write': "auth !== null && data.child(auth.uid).exists()"
+        '.write': "auth !== null && data.child(auth.uid).exists() || newData.hasChild(auth.uid)"
       }
     },
     messages: {
@@ -78,6 +78,7 @@ const data = {
 const database = targaryen.database(rules, data)
 const jane = {uid: 'jane'}
 const joe = {uid: 'joe'}
+const jake = {uid: 'jake'}
 
 test(`Anonymous user shouldn't be able to read/write chats, members and messages`, t => {
   t.is(database.read('/chats/room1').allowed, false)
@@ -117,4 +118,9 @@ test(`Jane shouldn't be able to read/write chats, members and messages in room2`
   t.is(database.as(jane).write('/chats/room2', {title: 'new title'}).allowed, false)
   t.is(database.as(jane).write('/members/room2', {newmember: true}).allowed, false)
   t.is(database.as(jane).write('/messages/room2/m3',{message: 'noooo'}).allowed, false)
+})
+
+test('Jake should be able to create new room', t => {
+  const dbWithJake = database.as(jake).write('/members/room3', {jane: true, jake: true})
+  t.is(dbWithJake.allowed, true)
 })
