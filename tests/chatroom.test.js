@@ -122,5 +122,27 @@ test(`Jane shouldn't be able to read/write chats, members and messages in room2`
 
 test('Jake should be able to create new room', t => {
   const dbWithJake = database.as(jake).write('/members/room3', {jane: true, jake: true})
+  const dbwithChatRoom3 = dbWithJake.newDatabase.write('/chats/room3', {
+    room3: {
+      title: "Which one should we eat?",
+      lastMessage: "how bout KFC?",
+      timestamp: 1459361975553
+    }
+  })
+  const dbwithMessage = dbwithChatRoom3.newDatabase.write('/messages/room3', {
+    m1: {
+      name: "jake",
+      message: "how bout KFC?",
+      timestamp: 1459361975553
+    }
+  })
+
   t.is(dbWithJake.allowed, true)
+  t.is(dbwithChatRoom3.allowed, true)
+  t.is(dbwithMessage.allowed, true)
+
+  const dbWithRoom3 = dbwithMessage.newDatabase
+  t.is(dbWithRoom3.as(jane).write('/chats/room3', {title: 'new title'}).allowed, true)
+  t.is(dbWithRoom3.as(jane).write('/members/room3', {newmember: true}).allowed, true)
+  t.is(dbWithRoom3.as(jane).write('/messages/room3/m2',{message: 'noooo'}).allowed, true)
 })
